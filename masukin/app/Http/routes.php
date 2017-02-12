@@ -79,7 +79,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/knockout', 'hasilController@knockout');
     Route::post('/knockout/update', 'hasilController@postKnockout');
 
-    
+    Route::get('/upload-file', 'UploadFileController@index');
+    Route::post('/upload-file/post', 'UploadFileController@store');
 });
 
 

@@ -96,9 +96,9 @@
                 <li {{ (Request::is('knokout') ? 'class=active':'')}}>
                     <a href="{{ url('/knockout') }}"><i class="fa fa-bar-chart"></i> Knockout </a>
                 </li>
-                <!--<li {{ (Request::is('medali') ? 'class=active':'')}}>
+                <!-- <li {{ (Request::is('medali') ? 'class=active':'')}}>
                     <a href="{{ url('/medali') }}"><i class="fa fa-desktop"></i> Medali </a>
-                </li> -->
+                </li>  -->
                 <li @yield('cabor')>
                     <a href="{{ url('/cabor') }}"><i class="fa fa-list-ol"></i> Atletik </a>
                 </li>
@@ -107,6 +107,9 @@
                 </li>
                 <li @yield('sejarah')>
                     <a href="{{ url('/sejarah') }}"><i class="fa fa-history"></i> Sejarah </a>
+                </li>
+                <li @yield('uploadFile')>
+                  <a href="{{ url('/upload-file') }}"><i class="fa fa-upload"></i>Upload File</a>
                 </li>
               </ul>
             </div>
