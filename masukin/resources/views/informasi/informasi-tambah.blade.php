@@ -60,9 +60,9 @@
 				<label class="col-md-2 control-label">Image</label>
 				<div class="col-md-6">
 					<input type="file" name="image" required>
-						@if($errors->has('isi-informasi'))
-				        	{!! $errors->first('isi-informasi') !!}
-			        	@endif 
+						@if($errors->has('image'))
+				        	{!! $errors->first('image') !!}
+			        	@endif
 			    </div>       		
         	</div>
         	<div class="clearfix"></div>

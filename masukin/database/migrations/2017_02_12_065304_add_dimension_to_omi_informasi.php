@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTimestampsToOmiInformasi extends Migration
+class AddDimensionToOmiInformasi extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class AddTimestampsToOmiInformasi extends Migration
     public function up()
     {
         Schema::table('omi_informasi', function (Blueprint $table) {
-            $table->timestamps();
+            $table->integer('imageWidth');
+            $table->integer('imageHeight');
         });
     }
 
@@ -25,7 +26,7 @@ class AddTimestampsToOmiInformasi extends Migration
     public function down()
     {
         Schema::table('omi_informasi', function (Blueprint $table) {
-            $table->dropColumn(['created_at', 'updated_at']);
+            $table->dropColumn(['imageWidth', 'imageHeight']);
         });
     }
 }

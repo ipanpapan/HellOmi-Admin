@@ -61,8 +61,8 @@
 				<label class="col-md-2 control-label">Image</label>
 				<div class="col-md-6">
 					<input type="file" name="image">
-						@if($errors->has('isi-informasi'))
-				        	{!! $errors->first('isi-informasi') !!}
+						@if($errors->has('image'))
+				        	{!! $errors->first('image') !!}
 			        	@endif 
 			    </div>       		
         	</div>

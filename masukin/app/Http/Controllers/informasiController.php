@@ -31,7 +31,7 @@ class informasiController extends Controller
      */
     public function index()
     {
-        $informasi = Informasi::all();
+        $informasi = Informasi::orderBy('id_informasi')->get();
 
         return view('informasi/informasi', ['informasi' => $informasi]);
     }
@@ -63,8 +63,9 @@ class informasiController extends Controller
             'judul-informasi'=>'required',
             'subjek-informasi'=>'required',
             'isi-informasi'=>'required',
-            'image'=>'required|mimes:jpg,jpeg|Max:500',
+            'image'=>'required|mimes:jpg,jpeg,png|Max:500',
             ));
+        
         if ($validation -> fails()) 
         {
             return Redirect::to('informasi/tambah')->withErrors($validation);
@@ -73,48 +74,71 @@ class informasiController extends Controller
         {
             $isipendek = str_limit($data->input('isi-informasi'), 100);
             $image = $data->file('image');
+            $imageInfo = getimagesize($image);
+            $imageWidth = $imageInfo[0];
+            $imageHeight = $imageInfo[1];
             $upload = 'assets/images/informasi';
             $filename = $image->getClientOriginalName();
             $success = $image->move($upload,$filename);
-            if ($success) {
-             
-            $table = new Informasi;
-            $table->judul_informasi = $data->input('judul-informasi');
-            $table->subjek_informasi = $data->input('subjek-informasi');
-            $table->isipanjang_informasi = $data->input('isi-informasi');
-            $table->isipendek_informasi = $isipendek;
-            $table->gambar_informasi = $upload.'/'.$filename;
-            $table->save();
-            return Redirect::to('informasi');
+            
+            if ($success)
+            {
+                $table = new Informasi;
+                $table->judul_informasi = $data->input('judul-informasi');
+                $table->subjek_informasi = $data->input('subjek-informasi');
+                $table->isipanjang_informasi = $data->input('isi-informasi');
+                $table->isipendek_informasi = $isipendek;
+                $table->imageWidth = $imageWidth;
+                $table->imageHeight = $imageHeight;
+                $table->gambar_informasi = $upload.'/'.$filename;
+                $table->save();
+                return Redirect::to('informasi');
             }
         }
     }
-    public function update(Request $data){
-        $s = new Informasi;
-        $isipendek = str_limit($data->input('isi-informasi'), 100);
-        $image = $data->file('image');
-        if($image)
+    public function update(Request $data)
+    {
+        $validation = Validator::make($data->all(), array(
+            'judul-informasi'=>'required',
+            'subjek-informasi'=>'required',
+            'isi-informasi'=>'required',
+            'image'=>'mimes:jpg,jpeg,png|Max:500',
+            ));
+
+        if ($validation -> fails()) 
         {
-            $upload = 'assets/images/informasi';
-            $filename = $image->getClientOriginalName();
-            $success = $image->move($upload,$filename);
-            $isi = array(
-                'judul_informasi' =>$data->input('judul-informasi'),
-                'subjek_informasi'=>$data->input('subjek-informasi'),
-                'isipanjang_informasi'=>$data->input('isi-informasi'),
-                'isipendek_informasi'=>$isipendek,
-                'gambar_informasi'=>$upload.'/'.$filename);
+            return Redirect::to('informasi/edit')->withErrors($validation);
         }
         else
         {
-        $isi = array(
-            'judul_informasi' =>$data->input('judul-informasi'),
-            'subjek_informasi'=>$data->input('subjek-informasi'),
-            'isipanjang_informasi'=>$data->input('isi-informasi'),
-            'isipendek_informasi'=>$isipendek);   
+            $s = new Informasi;
+            $isipendek = str_limit($data->input('isi-informasi'), 100);
+            $image = $data->file('image');
+            
+            if($image)
+            {
+                $upload = 'assets/images/informasi';
+                $filename = $image->getClientOriginalName();
+                $success = $image->move($upload,$filename);
+                $isi = array(
+                    'judul_informasi' =>$data->input('judul-informasi'),
+                    'subjek_informasi'=>$data->input('subjek-informasi'),
+                    'isipanjang_informasi'=>$data->input('isi-informasi'),
+                    'isipendek_informasi'=>$isipendek,
+                    'gambar_informasi'=>$upload.'/'.$filename);
+            }
+            else
+            {
+                $isi = array(
+                    'judul_informasi' =>$data->input('judul-informasi'),
+                    'subjek_informasi'=>$data->input('subjek-informasi'),
+                    'isipanjang_informasi'=>$data->input('isi-informasi'),
+                    'isipendek_informasi'=>$isipendek);   
+            }
+
+            $s->where('id_informasi',$data->input('id_informasi'))->update($isi);
+            return Redirect('informasi');
         }
-        $s->where('id_informasi',$data->input('id_informasi'))->update($isi);
-        return Redirect('informasi');
     }
 
 }
